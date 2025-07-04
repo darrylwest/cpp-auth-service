@@ -1,4 +1,4 @@
-# Gemini CLI Learnings for this project
+# Gemini CLI Learnings for egg-timer project
 
 This document summarizes key information and patterns learned during interactions with the Gemini CLI for the `egg-timer` project.
 
@@ -17,6 +17,23 @@ This document summarizes key information and patterns learned during interaction
 - **System Dependencies:** `cmake`, `ninja-build`, and `git` are installed via `apt-get`.
 - **Direct Unit Test Execution:** Unit tests are executed directly by running the compiled executable `./build/unit_tests` rather than using `ctest`.
 
+## Company C++ Style Preferences
+
+- **Structs vs. Classes:** Prefer `struct` over `class` for data-only structures.
+- **Function Pointers/Lambdas vs. Interfaces:** Prefer using function pointers or lambdas for callbacks and polymorphic behavior over defining explicit interfaces (abstract base classes).
+
 ## Local Development Workflow
 
-- **Build Command:** The preferred local build command is `./mk all`. This command handles cleaning the build directory, configuring CMake, and building the project.
+The project uses a `mk` bash script for common development tasks.
+
+- **`./mk all`**: Performs a full clean (`clobber`), initializes the build directory (`init`), builds the project (`build`), runs unit tests (`test`), and then runs the main application (`run`). This is the recommended command for a full local development cycle.
+- **`./mk init`**: Runs CMake to configure the build directory.
+- **`./mk build`**: Compiles the project.
+- **`./mk test`**: Runs the unit tests.
+- **`./mk run`**: Executes the main application.
+- **`./mk format`**: Runs `clang-format` on source and include files.
+- **`./mk clean`**: Removes binary builds but leaves the build folder.
+- **`./mk clobber`**: Removes the entire `build/` directory.
+- **`./mk pull`**: Performs a `git pull`.
+- **`./mk watch`**: Watches source files and rebuilds/runs tests on changes.
+- **`./mk help`**: Displays all available commands.
