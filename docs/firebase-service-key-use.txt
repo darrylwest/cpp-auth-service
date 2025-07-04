@@ -1,0 +1,101 @@
+How to Store Your Service Account Key in GitHub Secrets
+
+You'll essentially store the content of your service-account.json file as a secret.
+Get the Content of Your Service Account Key File:
+Open the service-account.json file you downloaded from the Firebase Console (the one you generated under Project Settings > Service Accounts).
+Copy the entire content of this JSON file. Make sure you copy everything, including the curly braces {} .
+Add the Secret to Your GitHub Repository:
+Go to your GitHub repository in your web browser.
+Click on Settings (usually near the top right).
+In the left sidebar, click on Secrets and variables and then Actions .
+Click on New repository secret.
+For Name, choose a descriptive name. A common convention is FIREBASE_SERVICE_ACCOUNT_KEY or GCP_SA_KEY . Let's use FIREBASE_SERVICE_ACCOUNT_KEY for this example.
+For Secret, paste the entire JSON content you copied in step 1.
+Click Add secret.
+Now, this secret is securely stored and available to your GitHub Actions workflows.
+
+How to Use the Secret in Your GitHub Actions Workflow
+
+In your .github/workflows/your_workflow.yml file, you can access this secret using the secrets context.
+There are two main ways to use it, depending on how your C++ application expects the credentials:
+
+Option 1: Create the JSON file dynamically at runtime (Recommended for direct file access)
+
+This is a very common pattern. Your workflow will create the service-account.json file on the CI runner using the secret's content, just before your C++ app needs it.
+name: CI/CD for C++ Auth Service
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest # Or your specific Ubuntu 24.10 runner
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive' # If you manage your vendor folder as a submodule
+
+      # Step to create the service account JSON file from the secret
+      - name: Create Firebase Service Account Key File
+        run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" > service-account.json
+        # IMPORTANT: This file will exist only for the duration of this job run.
+        # It's generated from the secret and never committed to Git.
+
+      - name: Configure CMake
+        run: cmake -B build .
+
+      - name: Build C++ Application
+        run: cmake --build build
+
+      - name: Run Tests (if you have them)
+        run: |
+          # Example: Your test command.
+          # Ensure your tests can access the service-account.json if needed
+          # e.g., your_test_runner --service-account-path ./service-account.json
+          # Or, if your app looks for GOOGLE_APPLICATION_CREDENTIALS, set it here:
+          export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/service-account.json
+          ./build/your_auth_service_tests
+
+      # Add your deployment steps here
+      # For deployment, your service might also need this file or an environment variable.
+      # You can ensure the service account file is available to your deployment process
+      # or pass its content as an environment variable to your deployment tool.
+
+In your C++ code, you would then configure the Firebase Admin SDK to load credentials from service-account.json (or whatever path you output it to).
+
+Option 2: Set GOOGLE_APPLICATION_CREDENTIALS environment variable (if your app supports it)
+
+If your C++ application uses Application Default Credentials (ADC) and expects the GOOGLE_APPLICATION_CREDENTIALS environment variable to point to the key file, you can combine this with Option 1:
+      # ... previous steps ...
+
+      - name: Create Firebase Service Account Key File
+        id: create_sa_file # Add an ID to this step to reference its output
+        run: |
+          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" > firebase-sa.json
+          echo "SA_FILE_PATH=$(pwd)/firebase-sa.json" >> $GITHUB_OUTPUT # Set an output variable
+        # Note: 'firebase-sa.json' is just an example name.
+
+      - name: Configure CMake and Build
+        run: |
+          export GOOGLE_APPLICATION_CREDENTIALS=${{ steps.create_sa_file.outputs.SA_FILE_PATH }}
+          cmake -B build .
+          cmake --build build
+
+      - name: Run Application/Tests
+        run: |
+          export GOOGLE_APPLICATION_CREDENTIALS=${{ steps.create_sa_file.outputs.SA_FILE_PATH }}
+          ./build/your_auth_service_executable # Or your test runner
+
+Key Takeaway: The service-account.json file is never stored in your Git repository. It's securely managed by GitHub and only temporarily created on the CI runner during the workflow execution.
+This approach keeps your Firebase project secure while allowing your CI/CD pipeline to authenticate and interact with Firebase services!
+
+----------------- Notes ----------------
+
+* Saved the service account in FIREBASE_SERVICE_ACCOUNT_KEY
+* Option 1 to create a file looks like the best approach
+
+
+###### dpw | 2025.07.04 | 81OkSxug9l9l
