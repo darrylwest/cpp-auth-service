@@ -60,13 +60,9 @@ CPMAddPackage(
         GITHUB_REPOSITORY nlohmann/json
         VERSION 3.11.3)
 
-CPMAddPackage(
-        NAME termio
-        GITHUB_REPOSITORY darrylwest/cpp-termio
-        GIT_TAG main
-        CMAKE_ARGS "-DBUILD_TESTING=OFF"
-)
-message(STATUS "cpp-termio library loaded")
+# Add local include and lib directories
+include_directories(/usr/local/include)
+link_directories(/usr/local/lib)
 
 # MacOS universal binary setup
 if(APPLE)
@@ -94,6 +90,8 @@ set(DEPENDENT_LIBRARIES
         pthread
         nlohmann_json::nlohmann_json
         termio
+        quickkv
+        domainkeys
 )
 
 # Add executables
