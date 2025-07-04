@@ -3,3 +3,4 @@ build
 .idea
 cmake-build-*
 logs/*.log
+vendor/firebase_cpp_sdk
