@@ -33,34 +33,15 @@ set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set(BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 
-# Download CPM.cmake if not present
-set(CPM_DOWNLOAD_VERSION 0.27.2)
-set(CPM_DOWNLOAD_LOCATION "${CMAKE_BINARY_DIR}/cmake/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
+# Set search path for locally installed libraries
+set(CMAKE_PREFIX_PATH "/usr/local" ${CMAKE_PREFIX_PATH})
 
-if(NOT EXISTS ${CPM_DOWNLOAD_LOCATION})
-    message(STATUS "Downloading CPM.cmake")
-    file(DOWNLOAD https://github.com/TheLartians/CPM.cmake/releases/download/v${CPM_DOWNLOAD_VERSION}/CPM.cmake ${CPM_DOWNLOAD_LOCATION})
-endif()
+# Find pre-built packages
+find_package(spdlog REQUIRED)
+find_package(Catch2 REQUIRED)
+find_package(nlohmann_json REQUIRED)
 
-include(${CPM_DOWNLOAD_LOCATION})
-
-# Find required packages
-CPMAddPackage(
-        NAME spdlog
-        GITHUB_REPOSITORY gabime/spdlog
-        VERSION 1.15.0)
-
-CPMAddPackage(
-        NAME Catch2
-        GITHUB_REPOSITORY CatchOrg/Catch2
-        VERSION 3.6.0)
-
-CPMAddPackage(
-        NAME nlohmann_json
-        GITHUB_REPOSITORY nlohmann/json
-        VERSION 3.11.3)
-
-# Add local include and lib directories
+# Add local include and lib directories for termio, quickkv, and domainkeys
 include_directories(/usr/local/include)
 link_directories(/usr/local/lib)
 
@@ -88,7 +69,7 @@ set(DEPENDENT_LIBRARIES
         spdlog::spdlog
         Catch2::Catch2WithMain
         pthread
-        nlohmann_json::nlohmann_json
+        nlohmann_json
         termio
         quickkv
         domainkeys
