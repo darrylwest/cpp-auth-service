@@ -6,8 +6,8 @@
 * [Password Authentication](https://firebase.google.com/docs/auth/cpp/password-auth?authuser=0)
 * [Email Enumeration Protection](https://cloud.google.com/identity-platform/docs/admin/email-enumeration-protection?authuser=0)
 * [reCapcha](https://cloud.google.com/recaptcha/docs/implementation-workflow?authuser=0)
-
-* [Firebase Studio AI](https://studio.firebase.google.com/)
+* [Google Console for cpp-auth-service](https://console.cloud.google.com/welcome?authuser=0&inv=1&invt=Ab14EA&project=cpp-auth-service)
+* [Firebase Studio AI (don't use)](https://studio.firebase.google.com/)
 
 
 ###### dpw | 2025.07.04 | 81OmMEPLkz4W
