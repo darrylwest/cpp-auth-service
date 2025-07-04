@@ -5,7 +5,7 @@
 
 set -eu
 
-export project=tiny-app
+export project=auth-service
 
 export verbose=''
 export os="$(uname -s)"

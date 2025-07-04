@@ -3,7 +3,7 @@
 //
 
 #include <spdlog/spdlog.h>
-#include <app/tiny.hpp>
+#include <app/auth.hpp>
 #include <string>
 #include <termio/termio.hpp>
 #include <print>
@@ -19,9 +19,9 @@ constexpr std::string_view BANNER = R"(
 int main() {
     using namespace termio::termio;
 
-    std::println("{}{}\n{}Version: {}{}", green(), BANNER, yellow(), app::tiny::VERSION, reset());
+    std::println("{}{}\n{}Version: {}{}", green(), BANNER, yellow(), app::auth::VERSION, reset());
     constexpr auto lang = "c++";
-    spdlog::info("Hello and welcome to {} tiny application, version: {}", lang, app::tiny::VERSION);
+    spdlog::info("Hello and welcome to {} auth service, version: {}", lang, app::auth::VERSION);
 
     return 0;
 }

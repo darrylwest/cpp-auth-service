@@ -1,4 +1,4 @@
-# Tiny Application Starter
+# Auth Service Starter
 
 ```
  _______ __                _______ __               __                _______              
@@ -25,11 +25,11 @@ Minimal application startup.
 ## File Structure
 
 ```
-tiny-app
+auth-service
   | 
   └─include
     ├── app
-    │   └── tiny.hpp
+    │   └── auth.hpp
     └── vendor
         ├── ansi_colors.hpp
         └── cxxopts.hpp

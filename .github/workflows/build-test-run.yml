@@ -67,5 +67,5 @@ jobs:
 
     - name: Run
       run: |
-        echo "=== Running tiny-app ==="
-        ./build/tiny-app
+        echo "=== Running auth-service ==="
+        ./build/auth-service
