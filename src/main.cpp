@@ -4,7 +4,6 @@
 
 #include <spdlog/spdlog.h>
 #include <app/auth.hpp>
-#include <string>
 #include <termio/termio.hpp>
 #include <print>
 
