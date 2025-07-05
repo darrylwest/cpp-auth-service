@@ -3,9 +3,10 @@
 //
 
 #include <spdlog/spdlog.h>
+
 #include <app/auth.hpp>
-#include <termio/termio.hpp>
 #include <print>
+#include <termio/termio.hpp>
 
 int main() {
     using namespace termio::termio;
@@ -17,4 +18,3 @@ int main() {
 
     return 0;
 }
-

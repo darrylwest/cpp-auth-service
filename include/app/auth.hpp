@@ -13,4 +13,4 @@ namespace app::auth {
     )";
 
     constexpr auto VERSION = "0.1.0-101";
-}
+}  // namespace app::auth
